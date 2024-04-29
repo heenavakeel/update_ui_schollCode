@@ -134,7 +134,7 @@ const Fee_Group_Master_Add_Edit_Screen = () => {
           >
             <div className='d-flex align-items-center'>
               <i className='bi bi-bell me-2'></i>
-              Circle Masater Form
+              Fee Group Masater Form
             </div>
             <Button
               color='warning'

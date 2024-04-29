@@ -43,46 +43,49 @@ const AddSlabMaster = () => {
     month_tot_12: 0,
   });
   const [errorMessage, setErrorMessage] = useState('');
-  const [rows, setRows] = useState({
-    id: 0,
-    slabMstId: 0,
-    fee_head_name: '',
-    fee_amt: 0,
-    circle: '',
-    month_1: 0,
-    month_2: 0,
-    month_3: 0,
-    month_4: 0,
-    month_5: 0,
-    month_6: 0,
-    month_7: 0,
-    month_8: 0,
-    month_9: 0,
-    month_10: 0,
-    month_11: 0,
-    month_12: 0,
-    fee_head_id: null,
-    circle_id: null,
-  });
+  const [rowsfeeHeadTable, setRowsfeeHeadTable] = useState([
+    {
+      id: 0,
+      slabMstId: 0,
+      checkedValue: false,
+      head_name: '',
+      fee_head_name: '',
+      fee_amt: 0,
+      circle: '',
+      month_1: 0,
+      month_2: 0,
+      month_3: 0,
+      month_4: 0,
+      month_5: 0,
+      month_6: 0,
+      month_7: 0,
+      month_8: 0,
+      month_9: 0,
+      month_10: 0,
+      month_11: 0,
+      month_12: 0,
+      fee_head_id: null,
+      circle_id: null,
+    },
+  ]);
   const [lastId, setLastId] = useState(0);
   const [slabDetailsTable, setSlabDetailsTable] = useState([]);
   const [displayValue, setDisplayValue] = useState(false);
-  const [feeHeadTable, setFeeHeadTable] = useState([]);
   const [circleTable, setCircleTable] = useState([]);
   const [popupVisible, setPopupVisible] = useState(false);
 
-  const [month_1, setMonth_1] = useState(0);
-  const [month_2, setMonth_2] = useState(0);
-  const [month_3, setMonth_3] = useState(0);
-  const [month_4, setMonth_4] = useState(0);
-  const [month_5, setMonth_5] = useState(0);
-  const [month_6, setMonth_6] = useState(0);
-  const [month_7, setMonth_7] = useState(0);
-  const [month_8, setMonth_8] = useState(0);
-  const [month_9, setMonth_9] = useState(0);
-  const [month_10, setMonth_10] = useState(0);
-  const [month_11, setMonth_11] = useState(0);
-  const [month_12, setMonth_12] = useState(0);
+  const [total_month_1, settotalMonth_1] = useState(0);
+  const [total_month_2, settotalMonth_2] = useState(0);
+  const [total_month_3, settotalMonth_3] = useState(0);
+  const [total_month_4, settotalMonth_4] = useState(0);
+  const [total_month_5, settotalMonth_5] = useState(0);
+  const [total_month_6, settotalMonth_6] = useState(0);
+  const [total_month_7, settotalMonth_7] = useState(0);
+  const [total_month_8, settotalMonth_8] = useState(0);
+  const [total_month_9, settotalMonth_9] = useState(0);
+  const [total_month_10, settotalMonth_10] = useState(0);
+  const [total_month_11, settotalMonth_11] = useState(0);
+  const [total_month_12, settotalMonth_12] = useState(0);
 
   const [slabMonthly, setSlabMonthly] = useState({
     month_1: false,
@@ -101,78 +104,160 @@ const AddSlabMaster = () => {
   //var monthTotals = Array.from({ length: 12 }, () => 0); // Initialize an array to store totals for each month
 
   useEffect(() => {
+    setDisplayValue(true);
     // Check if location state exists and set the feeheadData accordingly
     if (location.state) {
       setfeeheadData(location.state);
-      setRows((prevState) => ({
+      setRowsfeeHeadTable((prevState) => ({
         ...prevState,
         slabMstId: location.state?.id,
       }));
       setLastId(location.state?.id);
-      setDisplayValue(true);
+
       GetSlabMasterDetail(location.state?.id);
-      GetFeeHeadMaster();
-      GetCircleMaster();
     }
   }, [location.state]);
 
   useEffect(() => {
     GetFee_GroupData(null);
+    GetCircleMaster();
   }, []);
 
   useEffect(() => {
+    if (!displayValue) {
+      debugger;
+      setDisplayValue(true);
+      GetFeeHeadMaster();
+    }
+  }, [!displayValue]);
+
+  useEffect(() => {
     updateHeaderData();
-  }, [rows, slabDetailsTable]);
+  }, [rowsfeeHeadTable, slabDetailsTable]);
 
   const updateHeaderData = async () => {
     debugger;
-    setMonth_1(
-      slabDetailsTable.reduce((total, item) => total + item.month_1, 0) +
-        parseInt(rows.month_1)
+    settotalMonth_1(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_1) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_1) || 0),
+          0
+        )
     );
-    setMonth_2(
-      slabDetailsTable.reduce((total, item) => total + item.month_2, 0) +
-        parseInt(rows.month_2)
+
+    settotalMonth_2(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_2) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_2) || 0),
+          0
+        )
     );
-    setMonth_3(
-      slabDetailsTable.reduce((total, item) => total + item.month_3, 0) +
-        parseInt(rows.month_3)
+
+    settotalMonth_3(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_3) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_3) || 0),
+          0
+        )
     );
-    setMonth_4(
-      slabDetailsTable.reduce((total, item) => total + item.month_4, 0) +
-        parseInt(rows.month_4)
+    settotalMonth_4(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_4) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_4) || 0),
+          0
+        )
     );
-    setMonth_5(
-      slabDetailsTable.reduce((total, item) => total + item.month_5, 0) +
-        parseInt(rows.month_5)
+    settotalMonth_5(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_5) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_5) || 0),
+          0
+        )
     );
-    setMonth_6(
-      slabDetailsTable.reduce((total, item) => total + item.month_6, 0) +
-        parseInt(rows.month_6)
+    settotalMonth_6(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_6) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_6) || 0),
+          0
+        )
     );
-    setMonth_7(
-      slabDetailsTable.reduce((total, item) => total + item.month_7, 0) +
-        parseInt(rows.month_7)
+    settotalMonth_7(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_7) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_7) || 0),
+          0
+        )
     );
-    setMonth_8(
-      slabDetailsTable.reduce((total, item) => total + item.month_8, 0) +
-        parseInt(rows.month_8)
+    settotalMonth_8(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_8) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_8) || 0),
+          0
+        )
     );
-    setMonth_9(
-      slabDetailsTable.reduce((total, item) => total + item.month_9, 0) +
-        parseInt(rows.month_9)
+    settotalMonth_9(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_9) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_9) || 0),
+          0
+        )
     );
-    setMonth_10(
-      slabDetailsTable.reduce((total, item) => total + item.month_10, 0) +
-        parseInt(rows.month_10)
+    settotalMonth_10(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_10) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_10) || 0),
+          0
+        )
     );
-    setMonth_11(
-      slabDetailsTable.reduce((total, item) => total + item.month_11, 0) +
-        parseInt(rows.month_11)
+    settotalMonth_11(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_11) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_11) || 0),
+          0
+        )
     );
-    setMonth_12(
-      slabDetailsTable.reduce((total, item) => total + item.month_12, 0) +
-        parseInt(rows.month_12)
+    settotalMonth_12(
+      slabDetailsTable.reduce(
+        (total, item) => parseInt(total) + (parseInt(item.month_12) || 0),
+        0
+      ) +
+        rowsfeeHeadTable.reduce(
+          (total, item) => parseInt(total) + (parseInt(item.month_12) || 0),
+          0
+        )
     );
   };
 
@@ -192,6 +277,7 @@ const AddSlabMaster = () => {
         alert(response.response?.data?.errors);
       }
       if (response.status === true) {
+        debugger;
         setSlabDetailsTable(response.modelSlabDetailReq);
         //updateHeaderData();
       } else {
@@ -278,31 +364,31 @@ const AddSlabMaster = () => {
         },
       };
       debugger;
-      feeheadData.month_tot_1 = month_1;
-      feeheadData.month_tot_2 = month_2;
-      feeheadData.month_tot_3 = month_3;
-      feeheadData.month_tot_4 = month_4;
-      feeheadData.month_tot_5 = month_5;
-      feeheadData.month_tot_6 = month_6;
-      feeheadData.month_tot_7 = month_7;
-      feeheadData.month_tot_8 = month_8;
-      feeheadData.month_tot_9 = month_9;
-      feeheadData.month_tot_10 = month_10;
-      feeheadData.month_tot_11 = month_11;
-      feeheadData.month_tot_12 = month_12;
+      feeheadData.month_tot_1 = total_month_1;
+      feeheadData.month_tot_2 = total_month_2;
+      feeheadData.month_tot_3 = total_month_3;
+      feeheadData.month_tot_4 = total_month_4;
+      feeheadData.month_tot_5 = total_month_5;
+      feeheadData.month_tot_6 = total_month_6;
+      feeheadData.month_tot_7 = total_month_7;
+      feeheadData.month_tot_8 = total_month_8;
+      feeheadData.month_tot_9 = total_month_9;
+      feeheadData.month_tot_10 = total_month_10;
+      feeheadData.month_tot_11 = total_month_11;
+      feeheadData.month_tot_12 = total_month_12;
       feeheadData.fee_tot =
-        month_1 +
-        month_2 +
-        month_3 +
-        month_4 +
-        month_5 +
-        month_6 +
-        month_7 +
-        month_8 +
-        month_9 +
-        month_10 +
-        month_11 +
-        month_12;
+        total_month_1 +
+        total_month_2 +
+        total_month_3 +
+        total_month_4 +
+        total_month_5 +
+        total_month_6 +
+        total_month_7 +
+        total_month_8 +
+        total_month_9 +
+        total_month_10 +
+        total_month_11 +
+        total_month_12;
       const data = JSON.stringify(feeheadData);
 
       let response;
@@ -320,16 +406,14 @@ const AddSlabMaster = () => {
         );
       }
       if (response.status === true) {
+        debugger;
         alert(response.message);
         setLastId(response.lastId);
-        setRows((prevState) => ({
-          ...prevState,
-          slabMstId: response.lastId,
-        }));
+        addRowSlabDetails(response.lastId);
         //navigate('/Slab');
-        setDisplayValue(true);
-        GetFeeHeadMaster();
-        GetCircleMaster();
+        // setDisplayValue(true);
+        // GetFeeHeadMaster();
+        // GetCircleMaster();
       } else {
         alert(response.message);
       }
@@ -339,9 +423,10 @@ const AddSlabMaster = () => {
     }
   };
 
-  const addRow = async () => {
+  const addRowSlabDetails = async (masterId) => {
+    debugger;
     try {
-      if (lastId === 0) {
+      if (masterId === 0) {
         alert('Please add slab details first');
         return;
       }
@@ -352,10 +437,10 @@ const AddSlabMaster = () => {
         },
       };
 
-      const data = JSON.stringify(rows);
+      const data = JSON.stringify(rowsfeeHeadTable);
 
       const response = await apiService.post(
-        'api/SlabDetail/AddSlabDetail',
+        `api/SlabDetail/AddSlabDetail?masterId=${masterId}`,
         data,
         config
       );
@@ -385,13 +470,13 @@ const AddSlabMaster = () => {
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (index, e) => {
     debugger;
     const { name, value } = e.target;
     if (e.target?.selectedIndex != undefined) {
       const selectedOption = e.target.options[e.target?.selectedIndex];
       const selectedText = selectedOption?.text;
-      const monthlyValue = rows.fee_amt;
+      const monthlyValue = rowsfeeHeadTable[index].fee_amt;
       if (
         name.toLowerCase() === 'circle_id'.toLowerCase() &&
         selectedText.toLowerCase() === 'Random'.toLowerCase()
@@ -405,261 +490,341 @@ const AddSlabMaster = () => {
           for (let i = 1; i <= 12; i++) {
             updatedMonths[`month_${i}`] = monthlyValue;
           }
-          setRows((prevData) => ({
-            ...prevData,
-            ...updatedMonths,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              ...updatedMonths,
+              [name]: value,
+            };
+            return updatedRows;
+          });
+          // setRowsfeeHeadTable((prevData) => ({
+          //   ...prevData,
+          //   ...updatedMonths,
+          //   [name]: value,
+          // }));
         } else if (selectedText === 'Annual') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: monthlyValue,
-            month_2: 0,
-            month_3: 0,
-            month_4: 0,
-            month_5: 0,
-            month_6: 0,
-            month_7: 0,
-            month_8: 0,
-            month_9: 0,
-            month_10: 0,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: monthlyValue,
+              month_2: 0,
+              month_3: 0,
+              month_4: 0,
+              month_5: 0,
+              month_6: 0,
+              month_7: 0,
+              month_8: 0,
+              month_9: 0,
+              month_10: 0,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'Jan') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: 0,
-            month_2: 0,
-            month_3: 0,
-            month_4: 0,
-            month_5: 0,
-            month_6: 0,
-            month_7: 0,
-            month_8: 0,
-            month_9: 0,
-            month_10: monthlyValue,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: 0,
+              month_2: 0,
+              month_3: 0,
+              month_4: 0,
+              month_5: 0,
+              month_6: 0,
+              month_7: 0,
+              month_8: 0,
+              month_9: 0,
+              month_10: monthlyValue,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'Feb') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: 0,
-            month_2: 0,
-            month_3: 0,
-            month_4: 0,
-            month_5: 0,
-            month_6: 0,
-            month_7: 0,
-            month_8: 0,
-            month_9: 0,
-            month_10: 0,
-            month_11: monthlyValue,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: 0,
+              month_2: 0,
+              month_3: 0,
+              month_4: 0,
+              month_5: 0,
+              month_6: 0,
+              month_7: 0,
+              month_8: 0,
+              month_9: 0,
+              month_10: 0,
+              month_11: monthlyValue,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'March') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: 0,
-            month_2: 0,
-            month_3: 0,
-            month_4: 0,
-            month_5: 0,
-            month_6: 0,
-            month_7: 0,
-            month_8: 0,
-            month_9: 0,
-            month_10: 0,
-            month_11: 0,
-            month_12: monthlyValue,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: 0,
+              month_2: 0,
+              month_3: 0,
+              month_4: 0,
+              month_5: 0,
+              month_6: 0,
+              month_7: 0,
+              month_8: 0,
+              month_9: 0,
+              month_10: 0,
+              month_11: 0,
+              month_12: monthlyValue,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'April') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: monthlyValue,
-            month_2: 0,
-            month_3: 0,
-            month_4: 0,
-            month_5: 0,
-            month_6: 0,
-            month_7: 0,
-            month_8: 0,
-            month_9: 0,
-            month_10: 0,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: monthlyValue,
+              month_2: 0,
+              month_3: 0,
+              month_4: 0,
+              month_5: 0,
+              month_6: 0,
+              month_7: 0,
+              month_8: 0,
+              month_9: 0,
+              month_10: 0,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'May') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: 0,
-            month_2: monthlyValue,
-            month_3: 0,
-            month_4: 0,
-            month_5: 0,
-            month_6: 0,
-            month_7: 0,
-            month_8: 0,
-            month_9: 0,
-            month_10: 0,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: 0,
+              month_2: monthlyValue,
+              month_3: 0,
+              month_4: 0,
+              month_5: 0,
+              month_6: 0,
+              month_7: 0,
+              month_8: 0,
+              month_9: 0,
+              month_10: 0,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'June') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: 0,
-            month_2: 0,
-            month_3: monthlyValue,
-            month_4: 0,
-            month_5: 0,
-            month_6: 0,
-            month_7: 0,
-            month_8: 0,
-            month_9: 0,
-            month_10: 0,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: 0,
+              month_2: 0,
+              month_3: monthlyValue,
+              month_4: 0,
+              month_5: 0,
+              month_6: 0,
+              month_7: 0,
+              month_8: 0,
+              month_9: 0,
+              month_10: 0,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'July') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: 0,
-            month_2: 0,
-            month_3: 0,
-            month_4: monthlyValue,
-            month_5: 0,
-            month_6: 0,
-            month_7: 0,
-            month_8: 0,
-            month_9: 0,
-            month_10: 0,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: 0,
+              month_2: 0,
+              month_3: 0,
+              month_4: monthlyValue,
+              month_5: 0,
+              month_6: 0,
+              month_7: 0,
+              month_8: 0,
+              month_9: 0,
+              month_10: 0,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'August') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: 0,
-            month_2: 0,
-            month_3: 0,
-            month_4: 0,
-            month_5: monthlyValue,
-            month_6: 0,
-            month_7: 0,
-            month_8: 0,
-            month_9: 0,
-            month_10: 0,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: 0,
+              month_2: 0,
+              month_3: 0,
+              month_4: 0,
+              month_5: monthlyValue,
+              month_6: 0,
+              month_7: 0,
+              month_8: 0,
+              month_9: 0,
+              month_10: 0,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'September') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: 0,
-            month_2: 0,
-            month_3: 0,
-            month_4: 0,
-            month_5: 0,
-            month_6: monthlyValue,
-            month_7: 0,
-            month_8: 0,
-            month_9: 0,
-            month_10: 0,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: 0,
+              month_2: 0,
+              month_3: 0,
+              month_4: 0,
+              month_5: 0,
+              month_6: monthlyValue,
+              month_7: 0,
+              month_8: 0,
+              month_9: 0,
+              month_10: 0,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'October') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: 0,
-            month_2: 0,
-            month_3: 0,
-            month_4: 0,
-            month_5: 0,
-            month_6: 0,
-            month_7: monthlyValue,
-            month_8: 0,
-            month_9: 0,
-            month_10: 0,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: 0,
+              month_2: 0,
+              month_3: 0,
+              month_4: 0,
+              month_5: 0,
+              month_6: 0,
+              month_7: monthlyValue,
+              month_8: 0,
+              month_9: 0,
+              month_10: 0,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'November') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: 0,
-            month_2: 0,
-            month_3: 0,
-            month_4: 0,
-            month_5: 0,
-            month_6: 0,
-            month_7: 0,
-            month_8: monthlyValue,
-            month_9: 0,
-            month_10: 0,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: 0,
+              month_2: 0,
+              month_3: 0,
+              month_4: 0,
+              month_5: 0,
+              month_6: 0,
+              month_7: 0,
+              month_8: monthlyValue,
+              month_9: 0,
+              month_10: 0,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'December') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: 0,
-            month_2: 0,
-            month_3: 0,
-            month_4: 0,
-            month_5: 0,
-            month_6: 0,
-            month_7: 0,
-            month_8: 0,
-            month_9: monthlyValue,
-            month_10: 0,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: 0,
+              month_2: 0,
+              month_3: 0,
+              month_4: 0,
+              month_5: 0,
+              month_6: 0,
+              month_7: 0,
+              month_8: 0,
+              month_9: monthlyValue,
+              month_10: 0,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         } else if (selectedText === 'Quarterly') {
-          setRows((prevData) => ({
-            ...prevData,
-            month_1: monthlyValue,
-            month_2: 0,
-            month_3: 0,
-            month_4: 0,
-            month_5: monthlyValue,
-            month_6: 0,
-            month_7: 0,
-            month_8: 0,
-            month_9: monthlyValue,
-            month_10: 0,
-            month_11: 0,
-            month_12: 0,
-            [name]: value,
-          }));
+          setRowsfeeHeadTable((prevRows) => {
+            const updatedRows = [...prevRows];
+            updatedRows[index] = {
+              ...updatedRows[index],
+              month_1: monthlyValue,
+              month_2: 0,
+              month_3: 0,
+              month_4: 0,
+              month_5: monthlyValue,
+              month_6: 0,
+              month_7: 0,
+              month_8: 0,
+              month_9: monthlyValue,
+              month_10: 0,
+              month_11: 0,
+              month_12: 0,
+              [name]: value,
+            };
+            return updatedRows;
+          });
         }
       } else {
-        setRows((prevData) => ({
+        setRowsfeeHeadTable((prevData) => ({
           ...prevData,
           [name]: value,
         }));
       }
     } else {
-      setRows((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+      if (name == 'checkedValue') {
+        setRowsfeeHeadTable((prevRows) => {
+          const updatedRows = [...prevRows];
+          updatedRows[index] = {
+            ...updatedRows[index],
+            [name]: e.target.checked,
+          };
+          return updatedRows;
+        });
+      } else {
+        setRowsfeeHeadTable((prevRows) => {
+          const updatedRows = [...prevRows];
+          updatedRows[index] = {
+            ...updatedRows[index],
+            [name]: value,
+          };
+          return updatedRows;
+        });
+      }
     }
   };
 
@@ -700,6 +865,7 @@ const AddSlabMaster = () => {
   };
 
   const GetFeeHeadMaster = async () => {
+    debugger;
     try {
       let config = {
         headers: {
@@ -707,21 +873,37 @@ const AddSlabMaster = () => {
           accept: 'application/json',
         },
       };
+      if (!displayValue) {
+        const response = await apiService.get(
+          `api/FeeHeadMaster/GetFeeHeadMaster`,
+          config
+        );
+        if (response.response && response.response.data.errors) {
+          alert(response.response?.data?.errors);
+        }
 
-      const response = await apiService.get(
-        `api/FeeHeadMaster/GetFeeHeadMaster`,
-        config
-      );
-      debugger;
-      if (response.response && response.response.data.errors) {
-        alert(response.response?.data?.errors);
-      }
+        if (response.status === true) {
+          response.multiFeeHeadData.forEach((element, index) => {
+            setRowsfeeHeadTable((prevRows) => {
+              // If prevRows is not an array, initialize it as an empty array
+              if (!Array.isArray(prevRows)) {
+                prevRows = [];
+              }
+              const updatedRows = [...prevRows];
+              updatedRows[index] = {
+                ...updatedRows[index],
+                fee_head_id: element.id,
+                head_name: element.head_name,
+              };
+              return updatedRows;
+            });
+          });
 
-      if (response.status === true) {
-        setFeeHeadTable(response.multiFeeHeadData);
-        // setTotalPage(response.totalPages);
-      } else {
-        alert(response.message);
+          // setRowsfeeHeadTable(response.multiFeeHeadData);
+          // setTotalPage(response.totalPages);
+        } else {
+          alert(response.message);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -770,8 +952,8 @@ const AddSlabMaster = () => {
     setPopupVisible(false);
   };
   const clickOkButton = () => {
-    const monthlyValue = rows.fee_amt;
-    setRows((prevData) => ({
+    const monthlyValue = rowsfeeHeadTable.fee_amt;
+    setRowsfeeHeadTable((prevData) => ({
       ...prevData,
       month_1: slabMonthly.month_1 ? monthlyValue : 0,
       month_2: slabMonthly.month_2 ? monthlyValue : 0,
@@ -929,265 +1111,275 @@ const AddSlabMaster = () => {
                     </div>
                   </div>
                 </div>
-                <div className='d-flex justify-content-end mt-2'>
-                  <Button color='primary' onClick={AddSlabMaster}>
-                    Submit
-                  </Button>
-                </div>
-                {displayValue && (
-                  <div className='accordion-item' style={{ marginTop: '10px' }}>
-                    <h2 className='accordion-header' id='2'>
-                      <button
-                        className='accordion-button collapsed'
-                        type='button'
-                        data-bs-toggle='collapse'
-                        data-bs-target='#flush-collapseTwo'
-                        aria-expanded='false'
-                        aria-controls='flush-collapseTwo'
-                        style={{ backgroundColor: '#0000FF' }}
-                      >
-                        Fee Details
-                      </button>
-                    </h2>
-                    <div
-                      id='flush-collapseTwo'
-                      className='accordion-collapse collapse'
-                      aria-labelledby='2'
-                      data-bs-parent='#accordionFlushExample'
-                    >
-                      <div className='accordion-body'>
-                        <div className='row'>
-                          <table className='table'>
-                            <thead>
-                              <tr>
-                                <th>Sno</th>
-                                <th>Action</th>
-                                <th>Fee Head</th>
-                                <th>Fee Amount</th>
-                                <th>Fee Circle</th>
-                                <th>Apr-1</th>
-                                <th>May-2</th>
-                                <th>June-3</th>
-                                <th>July-4</th>
-                                <th>Aug-5</th>
-                                <th>Sep-6</th>
-                                <th>Oct-7</th>
-                                <th>Nov-8</th>
-                                <th>Dec-9</th>
-                                <th>Jan-10</th>
-                                <th>Feb-11</th>
-                                <th>Mar-12</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>1</td>
-                                <td>
-                                  <Button
-                                    color='primary'
-                                    size='bg'
-                                    onClick={addRow}
-                                  >
-                                    Add
-                                  </Button>
-                                </td>
-                                <td>
-                                  <select
-                                    className='form-select'
-                                    style={{ width: '80px' }}
-                                    value={rows.fee_head_id}
-                                    name='fee_head_id'
-                                    onChange={handleInputChange}
-                                  >
-                                    <option value='0'>Select Fee Head</option>
-                                    {feeHeadTable.map((option) => (
-                                      <option key={option.id} value={option.id}>
-                                        {option.head_name}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </td>
-                                <td>
-                                  <input
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.fee_amt}
-                                    name='fee_amt'
-                                    onChange={handleInputChange}
-                                  />
-                                </td>
-                                <td>
-                                  <select
-                                    className='form-select'
-                                    style={{ width: '80px' }}
-                                    value={rows.circle_id}
-                                    name='circle_id'
-                                    onChange={handleInputChange}
-                                  >
-                                    <option value='0'>Select Circle</option>
-                                    {circleTable.map((option) => (
-                                      <option key={option.id} value={option.id}>
-                                        {option.circle_name}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_1}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_2}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_3}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_4}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_5}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_6}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_7}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_8}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_9}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_10}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_11}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    readOnly
-                                    type='text'
-                                    className='form-control'
-                                    value={rows.month_12}
-                                  />
-                                </td>
-                                <td></td>
-                              </tr>
 
-                              {slabDetailsTable.map((item, index) => (
-                                <tr key={index}>
-                                  <td>{index + 2}</td>
+                {/* {displayValue && ( */}
+                <div className='accordion-item' style={{ marginTop: '10px' }}>
+                  <h2 className='accordion-header' id='2'>
+                    <button
+                      className='accordion-button collapsed'
+                      type='button'
+                      data-bs-toggle='collapse'
+                      data-bs-target='#flush-collapseTwo'
+                      aria-expanded='false'
+                      aria-controls='flush-collapseTwo'
+                      style={{ backgroundColor: '#0000FF' }}
+                    >
+                      Fee Details
+                    </button>
+                  </h2>
+                  <div
+                    id='flush-collapseTwo'
+                    className='accordion-collapse collapse'
+                    aria-labelledby='2'
+                    data-bs-parent='#accordionFlushExample'
+                  >
+                    <div className='accordion-body'>
+                      <div className='row'>
+                        <table className='table'>
+                          <thead>
+                            <tr>
+                              <th>Sno</th>
+                              <th>Action</th>
+                              <th>Fee Head</th>
+                              <th>Fee Amount</th>
+                              <th>Fee Circle</th>
+                              <th>Apr-1</th>
+                              <th>May-2</th>
+                              <th>June-3</th>
+                              <th>July-4</th>
+                              <th>Aug-5</th>
+                              <th>Sep-6</th>
+                              <th>Oct-7</th>
+                              <th>Nov-8</th>
+                              <th>Dec-9</th>
+                              <th>Jan-10</th>
+                              <th>Feb-11</th>
+                              <th>Mar-12</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {Array.isArray(rowsfeeHeadTable) &&
+                              rowsfeeHeadTable.map((rows, index) => (
+                                <tr>
+                                  <td>{index + 1}</td>
                                   <td>
-                                    <Button
-                                      color='danger'
-                                      size='bg'
-                                      onClick={() =>
-                                        onHandleDeletSlabDetails(item.id)
+                                    <input
+                                      type='checkbox'
+                                      className='form-check-input'
+                                      checked={rows.checkedValue}
+                                      value={rows.checkedValue}
+                                      name='checkedValue'
+                                      onChange={(e) =>
+                                        handleInputChange(index, e)
+                                      }
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type='text'
+                                      className='form-control'
+                                      style={{ width: '200px' }}
+                                      value={rows.head_name}
+                                      name='fee_amt'
+                                      onChange={(e) =>
+                                        handleInputChange(index, e)
+                                      }
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.fee_amt}
+                                      name='fee_amt'
+                                      onChange={(e) =>
+                                        handleInputChange(index, e)
+                                      }
+                                    />
+                                  </td>
+                                  <td>
+                                    <select
+                                      className='form-select'
+                                      style={{ width: '80px' }}
+                                      value={rows.circle_id}
+                                      name='circle_id'
+                                      onChange={(e) =>
+                                        handleInputChange(index, e)
                                       }
                                     >
-                                      Delete
-                                    </Button>
+                                      <option value='0'>Select Circle</option>
+                                      {circleTable.map((option) => (
+                                        <option
+                                          key={option.id}
+                                          value={option.id}
+                                        >
+                                          {option.circle_name}
+                                        </option>
+                                      ))}
+                                    </select>
                                   </td>
-                                  <td>{item.fee_head_name}</td>
-                                  <td>{item.fee_amt}</td>
-                                  <td>{item.circle}</td>
-                                  <td>{item.month_1}</td>
-                                  <td>{item.month_2}</td>
-                                  <td>{item.month_3}</td>
-                                  <td>{item.month_4}</td>
-                                  <td>{item.month_5}</td>
-                                  <td>{item.month_6}</td>
-                                  <td>{item.month_7}</td>
-                                  <td>{item.month_8}</td>
-                                  <td>{item.month_9}</td>
-                                  <td>{item.month_10}</td>
-                                  <td>{item.month_11}</td>
-                                  <td>{item.month_12}</td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_1}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_2}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_3}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_4}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_5}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_6}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_7}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_8}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_9}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_10}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_11}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      readOnly
+                                      type='text'
+                                      className='form-control'
+                                      value={rows.month_12}
+                                    />
+                                  </td>
+                                  <td></td>
                                 </tr>
                               ))}
-                            </tbody>
-                            <tfoot>
-                              <tr>
-                                <td colSpan='5'>Totals</td>
-                                <td>{month_1}</td>
-                                <td>{month_2}</td>
-                                <td>{month_3}</td>
-                                <td>{month_4}</td>
-                                <td>{month_5}</td>
-                                <td>{month_6}</td>
-                                <td>{month_7}</td>
-                                <td>{month_8}</td>
-                                <td>{month_9}</td>
-                                <td>{month_10}</td>
-                                <td>{month_11}</td>
-                                <td>{month_12}</td>
+
+                            {slabDetailsTable.map((item, index) => (
+                              <tr key={index}>
+                                <td>{index + 2}</td>
+                                <td>
+                                  <Button
+                                    color='danger'
+                                    size='bg'
+                                    onClick={() =>
+                                      onHandleDeletSlabDetails(item.id)
+                                    }
+                                  >
+                                    Delete
+                                  </Button>
+                                </td>
+                                <td>{item.fee_head_name}</td>
+                                <td>{item.fee_amt}</td>
+                                <td>{item.circle}</td>
+                                <td>{item.month_1}</td>
+                                <td>{item.month_2}</td>
+                                <td>{item.month_3}</td>
+                                <td>{item.month_4}</td>
+                                <td>{item.month_5}</td>
+                                <td>{item.month_6}</td>
+                                <td>{item.month_7}</td>
+                                <td>{item.month_8}</td>
+                                <td>{item.month_9}</td>
+                                <td>{item.month_10}</td>
+                                <td>{item.month_11}</td>
+                                <td>{item.month_12}</td>
                               </tr>
-                            </tfoot>
-                          </table>
-                        </div>
+                            ))}
+                          </tbody>
+                          <tfoot>
+                            <tr>
+                              <td colSpan='5'>Totals</td>
+                              <td>{total_month_1}</td>
+                              <td>{total_month_2}</td>
+                              <td>{total_month_3}</td>
+                              <td>{total_month_4}</td>
+                              <td>{total_month_5}</td>
+                              <td>{total_month_6}</td>
+                              <td>{total_month_7}</td>
+                              <td>{total_month_8}</td>
+                              <td>{total_month_9}</td>
+                              <td>{total_month_10}</td>
+                              <td>{total_month_11}</td>
+                              <td>{total_month_12}</td>
+                            </tr>
+                          </tfoot>
+                        </table>
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
+                {/* )} */}
               </div>
               {/* Popup */}
+
+              <Button className='mt-2' color='primary' onClick={AddSlabMaster}>
+                Submit
+              </Button>
+
               <div className={`popup${popupVisible ? ' visible' : ''}`}>
                 <div className='d-flex justify-content-between align-items-center mt-2'>
                   <b className='m-0'>
@@ -1333,10 +1525,13 @@ const AddSlabMaster = () => {
                     </li>
                   </ul>
                 </div>
+
                 <div className='d-flex justify-content-end mt-2'>
                   <Button color='primary' onClick={clickOkButton}>
                     OK
                   </Button>
+
+                  {/* </div> */}
                 </div>
               </div>
               {/* Popup toggle button */}

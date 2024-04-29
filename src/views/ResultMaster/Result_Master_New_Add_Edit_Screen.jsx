@@ -129,10 +129,10 @@ const Result_Master_New_Add_Edit_Screen = () => {
       GetResult_Master_NewData(location.state?.admit_no);
     }
   }, [location.state]);
-  useEffect(() => {
-    // Check if location state exists and set the Result_Master_NewData accordingly
-    GetClass_Transection_Data();
-  }, [!isUpdate]);
+  // useEffect(() => {
+  //   // Check if location state exists and set the Result_Master_NewData accordingly
+  //   GetClass_Transection_Data();
+  // }, [!isUpdate]);
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -182,6 +182,7 @@ const Result_Master_New_Add_Edit_Screen = () => {
       let response;
 
       if (isUpdate) {
+        debugger;
         const data = JSON.stringify(updateMasterTransection);
         response = await apiService.post(
           'api/Result_Master_New/UpdateResult_Master_New',
@@ -229,7 +230,7 @@ const Result_Master_New_Add_Edit_Screen = () => {
         },
       };
       const response = await apiService.get(
-        `api/Admission/GetAdmission?search=${search}`,
+        `api/Admission/GetSchAdmissionResult?search=${search}`,
         config
       );
       debugger;
@@ -239,6 +240,9 @@ const Result_Master_New_Add_Edit_Screen = () => {
 
       if (response.status === true) {
         setPartyTable(response.data);
+        if (response.data != null) {
+          GetClass_Transection_Data(response.data[0].id);
+        }
         // setTotalPage(response.totalPages);
       } else {
         alert(response.message);
@@ -282,9 +286,9 @@ const Result_Master_New_Add_Edit_Screen = () => {
     }
   };
 
-  useEffect(() => {
-    GetAdmission();
-  }, [!partyTable]);
+  // useEffect(() => {
+  //   GetAdmission();
+  // }, [!partyTable]);
 
   const handleInputChange = (index, event) => {
     debugger;

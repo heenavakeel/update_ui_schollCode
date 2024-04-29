@@ -84,6 +84,17 @@ const navigation = [
     icon: 'bi bi-card-text',
   },
   {
+    title: 'System Record',
+    href: '/SystemRecords',
+    icon: 'bi bi-card-text',
+  },
+  {
+    title: 'Multi Purpose Master',
+    href: '/Multi_Purpose_Type_Master_Search',
+    icon: 'bi bi-card-text',
+  },
+
+  {
     title: 'Add Sale',
     href: '/addsale',
     icon: 'bi bi-card-text',

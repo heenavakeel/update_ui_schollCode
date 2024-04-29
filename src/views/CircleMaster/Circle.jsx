@@ -77,29 +77,30 @@ const Circle = () => {
     try {
       let config = {
         headers: {
-          'Content-Type': 'application/json', // Important for file upload//s
+          'Content-Type': 'application/json',
           accept: 'application/json',
         },
       };
 
       const response = await apiService.get(
-        `api/CircleMaster/GetCircleMaster`,
+        `api/CircleMaster/GetCircleMaster?search=${search}`,
         config
       );
       debugger;
-      if (response.response && response.response.data.errors) {
-        alert(response.response?.data?.errors);
-      }
-
-      if (response.status === true) {
-        setPartyTable(response.data);
-        // setTotalPage(response.totalPages);
+      if (response && response.data) {
+        if (response.status === true) {
+          setPartyTable(response.data);
+          // setTotalPage(responseData.totalPages);
+        } else {
+          alert(response.message);
+        }
       } else {
-        alert(response.message);
+        // Handle response structure errors
+        alert('Invalid response structure');
       }
     } catch (error) {
       console.log(error);
-      alert('SomeThing went wrong!!');
+      alert('Something went wrong!');
     }
   };
 

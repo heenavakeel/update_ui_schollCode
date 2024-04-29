@@ -77,28 +77,41 @@ const Admission = () => {
     try {
       let config = {
         headers: {
-          'Content-Type': 'application/json', // Important for file upload//s
+          'Content-Type': 'application/json',
           accept: 'application/json',
         },
       };
-      const response = await apiService.get(
-        `api/Admission/GetAdmission?search=${search}`,
-        config
-      );
-      debugger;
+
+      let apiUrl = `api/Admission/GetAdmission?search=${search}&page=${page}&limit=${limit}`;
+
+      // If search is not empty, get all records and then slice the last 10
+      if (search !== '') {
+        apiUrl = `api/Admission/GetAdmission?search=${search}`;
+      }
+
+      const response = await apiService.get(apiUrl, config);
+
       if (response.response && response.response.data.errors) {
         alert(response.response?.data?.errors);
       }
 
       if (response.status === true) {
-        setPartyTable(response.data);
-        // setTotalPage(response.totalPages);
+        let admissionData = response.data;
+
+        // If search is not empty, slice the last 10 records
+        if (search !== '') {
+          admissionData = admissionData.slice(-10);
+        }
+
+        setPartyTable(admissionData);
+        setTotalPage(response.totalPages); // Update the totalPage state
+        console.log(admissionData);
       } else {
         alert(response.message);
       }
     } catch (error) {
       console.log(error);
-      alert('SomeThing went wrong!!');
+      alert('Something went wrong!!');
     }
   };
 
@@ -171,72 +184,6 @@ const Admission = () => {
                     <td>{item.roll_no}</td>
                     <td>{item.d_o_b}</td>
                     <td>{item.adm_date}</td>
-
-                    {/* <td>{item.curr_sec}</td> */}
-                    {/* <td>{item.roll_no}</td>
-                    <td>{item.barcode_no}</td>
-                    <td>{item.ac_close_yn}</td>
-                    <td>{item.ac_close_date}</td>
-                    <td>{item.tc_issue_yn}</td>
-                    <td>{item.tc_issue_date}</td>
-                    <td>{item.sadd1}</td>
-                    <td>{item.sadd2}</td>
-                    <td>{item.sadd3}</td>
-                    <td>{item.state_name}</td>
-                    <td>{item.pin_code}</td>
-                    <td>{item.alt_add}</td>
-                    <td>{item.living_dur}</td>
-                    <td>{item.category_class}</td>
-                    <td>{item.religion_name}</td>
-                    <td>{item.mother_tong}</td>
-                    <td>{item.addhar_no}</td>
-                    <td>{item.bank_name}</td>
-                    <td>{item.bank_ac_no}</td>
-                    <td>{item.cov_yn}</td>
-                    <td>{item.con_det}</td>
-                    <td>{item.fee_group}</td>
-                    <td>{item.slab_code}</td>
-                    <td>{item.fee_slab}</td>
-                    <td>{item.fee_flag_type}</td>
-                    <td>{item.tot_fees}</td>
-                    <td>{item.op_bal}</td>
-                    <td>{item.douc_list_det}</td>
-                    <td>{item.f_name}</td>
-                    <td>{item.m_name}</td>
-                    <td>{item.g_name}</td>
-                    <td>{item.f_quali}</td>
-                    <td>{item.m_quali}</td>
-                    <td>{item.g_quali}</td>
-                    <td>{item.f_prof}</td>
-                    <td>{item.m_prof}</td>
-                    <td>{item.g_prof}</td>
-                    <td>{item.f_income}</td>
-                    <td>{item.m_income}</td>
-                    <td>{item.g_income}</td>
-                    <td>{item.f_officeph}</td>
-                    <td>{item.m_officeph}</td>
-                    <td>{item.g_officeph}</td>
-                    <td>{item.f_mob}</td>
-                    <td>{item.m_mob}</td>
-                    <td>{item.g_mob}</td>
-                    <td>{item.entering_date_time}</td>
-                    <td>{item.last_sch_name}</td>
-                    <td>{item.last_sch_add}</td>
-                    <td>{item.last_sch_city}</td>
-                    <td>{item.last_sch_state}</td>
-                    <td>{item.last_sch_pincode}</td>
-                    <td>{item.last_sch_adm_no}</td>
-                    <td>{item.mark_obtain}</td>
-                    <td>{item.max_marks}</td>
-                    <td>{item.last_marks_per}</td>
-                    <td>{item.sibling_adm_no_1}</td>
-                    <td>{item.sibling_class_1}</td>
-                    <td>{item.sibling_name_1}</td>
-                    <td>{item.sibling_adm_no_2}</td>
-                    <td>{item.sibling_class_2}</td>
-                    <td>{item.sibling_name_2}</td>
-                    <td>{item.sys_remark}</td> */}
-
                     <td>
                       <Button
                         color='success'

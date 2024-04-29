@@ -14,7 +14,8 @@ import {
 } from 'reactstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { apiService } from '../../constants/ApiService';
-
+import PdfView from './PdfView';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 const Fee_Reciept_Master_Add_Edit_Screen = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -392,15 +393,7 @@ const Fee_Reciept_Master_Add_Edit_Screen = () => {
           data,
           config
         );
-
-        // const [response1, response2] = await Promise.all([
-        //   await apiService.post('api/FeeReciept/AddFeeReciept', data, config),
-        //   await apiService.post('api/FeeReciept/AddFeeReciept', data, config),
-        // ]);
       }
-
-      console.log(response);
-      console.log(data);
       debugger;
       if (response.status === true) {
         alert(response.message);
@@ -1212,7 +1205,6 @@ const Fee_Reciept_Master_Add_Edit_Screen = () => {
                     </div>
                   </div>
                 </div>
-
                 <Button
                   className='mt-2'
                   color='primary'
@@ -1220,6 +1212,20 @@ const Fee_Reciept_Master_Add_Edit_Screen = () => {
                 >
                   Submit
                 </Button>
+                &nbsp;
+                <PDFDownloadLink
+                  document={
+                    <PdfView
+                      admission_Data={Admission_data}
+                      tc_Issue_Master_Data={Fee_Reciept_MasterData}
+                    />
+                  }
+                  fileName='fee_acceptance'
+                >
+                  {({ blob, url, loading, error }) =>
+                    loading ? 'Loading document...' : 'Download now!'
+                  }
+                </PDFDownloadLink>
               </Form>
             </CardBody>
           </Card>
@@ -1246,7 +1252,7 @@ const Fee_Reciept_Master_Add_Edit_Screen = () => {
                           <>
                             <tr key={index}>
                               <td>{item.fee_head_name}</td>
-                              <td></td>
+                              <td>{item.fee_amt}</td>
                               <td>{item.paid}</td>
                               <td>{item.pending}</td>
                               <td>{item.fee_amt}</td>

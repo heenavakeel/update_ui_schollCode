@@ -12,26 +12,31 @@ import {
   Input,
   FormText,
   Table,
+  Alert,
 } from 'reactstrap';
+import ReactPaginate from 'react-paginate';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../../constants/ApiService';
 
-const Fee_Reciept_Master_Search = () => {
+const Multi_Purpose_Type_Master_Search = () => {
   const navigate = useNavigate();
-  const [Fee_Reciept_Master_data, setFee_Reciept_Master_data] = useState([]);
+  const [Multi_Purpose_Type_Master_data, setMulti_Purpose_Type_Master_data] =
+    useState([]);
+  const [totalPage, setTotalPage] = useState(); // Current page for pagination
 
   const onHandle_AddDesired_Redirect = () => {
-    navigate('/Fee_Reciept_Master_Add_Edit_Screen');
+    navigate('/Multi_Purpose_Type_Master_Add_Edit_Screen');
   };
 
   const onHandleSearchKeyItem = (e) => {
+    console.log('sss');
     const value = e.target.value;
-    GetFee_Reciept_MasterData(value);
+    getMulti_Purpose_Type_MasterData(value);
   };
 
   const onHandleEdit = (id) => {
-    let findArrayData = Fee_Reciept_Master_data.find((e) => e.id === id);
-    navigate('/Fee_Reciept_Master_Add_Edit_Screen', {
+    let findArrayData = Multi_Purpose_Type_Master_data.find((e) => e.id === id);
+    navigate('/Multi_Purpose_Type_Master_Add_Edit_Screen', {
       state: { ...findArrayData },
     });
   };
@@ -44,23 +49,22 @@ const Fee_Reciept_Master_Search = () => {
       try {
         let config = {
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json', // Important for file uploads
             accept: 'application/json',
           },
         };
 
         const response = await apiService.delete(
-          `api/FeeReciept/DeleteFeeReciept?id=${id}`,
+          `api/Multi_Purpose_Type_MasterX/Delete Multi_Purpose_Type_Master?id=${id}`,
           config
         );
-
         if (response.response && response.response.data.errors) {
           alert(response.response?.data?.errors);
         }
 
         if (response.status === true) {
           alert(response.message);
-          GetFee_Reciept_MasterData();
+          getMulti_Purpose_Type_MasterData();
         } else {
           alert(response.message);
         }
@@ -73,20 +77,21 @@ const Fee_Reciept_Master_Search = () => {
     }
   };
 
-  const GetFee_Reciept_MasterData = async (search) => {
+  const getMulti_Purpose_Type_MasterData = async (search) => {
     if (search == null) {
       search = '';
     }
+    console.log(search);
     try {
       let config = {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json', // Important for file uploads
           accept: 'application/json',
         },
       };
 
       const response = await apiService.get(
-        `api/FeeReciept/GetFeeReciept?searchItem=${search}`,
+        `api/Multi_Purpose_Type_Master/GetMulti_Purpose_Type_Master?searchItem=${search}`,
         config
       );
 
@@ -95,7 +100,9 @@ const Fee_Reciept_Master_Search = () => {
       }
 
       if (response.status === true) {
-        setFee_Reciept_Master_data(response.data);
+        setMulti_Purpose_Type_Master_data(response.data);
+        console.log(response.data);
+        // setTotalPage(response.totalPages);
       } else {
         alert(response.message);
       }
@@ -105,8 +112,12 @@ const Fee_Reciept_Master_Search = () => {
     }
   };
 
+  const handlePageClick = (data) => {
+    getMulti_Purpose_Type_MasterData(data.selected + 1);
+  };
+
   useEffect(() => {
-    GetFee_Reciept_MasterData();
+    getMulti_Purpose_Type_MasterData();
   }, []);
 
   return (
@@ -119,7 +130,7 @@ const Fee_Reciept_Master_Search = () => {
           >
             <div className='d-flex align-items-center'>
               <i className='bi bi-card-text me-2'></i>
-              Fee_Reciept_Master Details
+              Multi_Purpose_Type_Master Details
             </div>
 
             <Row
@@ -142,7 +153,7 @@ const Fee_Reciept_Master_Search = () => {
               size='bg'
               onClick={onHandle_AddDesired_Redirect}
             >
-              Add Fee_Reciept_Master
+              Add Multi_Purpose_Type_Master
             </Button>
           </CardTitle>
 
@@ -150,28 +161,32 @@ const Fee_Reciept_Master_Search = () => {
             <Table bordered>
               <thead>
                 <tr>
-                  <th>sadmitno</th>
-                  <th>Student Name</th>
-                  <th>Curr Class</th>
-                  <th>Mobile No</th>
-
-                  {/* Add other table headings here */}
-
+                  <th>Sr No</th>
+                  <th>multi_purpose_code</th>
+                  <th>multi_purpose_type</th>
+                  <th>multi_purpose_remark</th>
+                  <th>Edit</th>
                   <th>Delete</th>
                 </tr>
               </thead>
               <tbody>
-                {Fee_Reciept_Master_data.map((item, index) => (
+                {Multi_Purpose_Type_Master_data.map((item, index) => (
                   <tr key={index}>
-                    <td>{item.sadmitno}</td>
-                    <td>{item.stud_name}</td>
+                    <th scope='row'>{index + 1}</th>
 
-                    <td>{item.curr_class}</td>
+                    <th>{item.multi_purpose_code}</th>
+                    <th>{item.multi_purpose_type}</th>
 
-                    <td>{item.f_mob}</td>
-
-                    {/* Add other table data here */}
-
+                    <th>{item.multi_purpose_remark}</th>
+                    <td>
+                      <Button
+                        color='success'
+                        size='bg'
+                        onClick={() => onHandleEdit(item.id)}
+                      >
+                        Edit
+                      </Button>
+                    </td>
                     <td>
                       <Button
                         color='danger'
@@ -192,4 +207,4 @@ const Fee_Reciept_Master_Search = () => {
   );
 };
 
-export default Fee_Reciept_Master_Search;
+export default Multi_Purpose_Type_Master_Search;

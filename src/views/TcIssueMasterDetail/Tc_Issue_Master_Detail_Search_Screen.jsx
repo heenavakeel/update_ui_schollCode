@@ -54,7 +54,7 @@ const Tc_Issue_Master_Detail_Search_Screen = () => {
         };
 
         const response = await apiService.delete(
-          `api/Transporter_NameX/DeleteTransporter_Name?id=${id}`,
+          `api/TcIssueMasterDetail/DeleteTc_Issue_Master_Detail?id=${id}`,
           config
         );
         if (response.response && response.response.data.errors) {
@@ -90,7 +90,7 @@ const Tc_Issue_Master_Detail_Search_Screen = () => {
       };
 
       const response = await apiService.get(
-        `api/Transporter_Name/GetTransporter_Name?searchItem=${search}`,
+        `api/TcIssueMasterDetail/GetTc_Issue_Master_Detail?searchItem=${search}`,
         config
       );
 
@@ -129,7 +129,7 @@ const Tc_Issue_Master_Detail_Search_Screen = () => {
           >
             <div className='d-flex align-items-center'>
               <i className='bi bi-card-text me-2'></i>
-              Transporter_Name Details
+              TC Details
             </div>
 
             <Row
@@ -152,7 +152,7 @@ const Tc_Issue_Master_Detail_Search_Screen = () => {
               size='bg'
               onClick={onHandle_AddDesired_Redirect}
             >
-              Add Transporter_Name
+              Add TC
             </Button>
           </CardTitle>
 
@@ -161,45 +161,13 @@ const Tc_Issue_Master_Detail_Search_Screen = () => {
               <thead>
                 <tr>
                   <th>tc_no_manual</th>
-                  <th>entry_date_time</th>
                   <th>issue_date</th>
-                  <th>photo_image</th>
-                  <th>adm_sch_id</th>
                   <th>admit_no</th>
                   <th>sname</th>
                   <th>sex_mf</th>
                   <th>d_o_b</th>
-                  <th>adm_date</th>
-                  <th>f_name</th>
-                  <th>m_name</th>
                   <th>tc_for_current</th>
                   <th>tc_for_end</th>
-                  <th>curr_class</th>
-                  <th>curr_class_in_roman</th>
-                  <th>curr_class_in_word</th>
-                  <th>promted_class</th>
-                  <th>promoted_class_in_roman</th>
-                  <th>promoted_class_in_word</th>
-                  <th>date_numric</th>
-                  <th>month_no</th>
-                  <th>year_no</th>
-                  <th>from_year</th>
-                  <th>to_year</th>
-                  <th>possible_attend_days</th>
-                  <th>attendance_days</th>
-                  <th>leave_taken_days</th>
-                  <th>result_detail</th>
-                  <th>promot_yn</th>
-                  <th>certificate_type</th>
-                  <th>file_no_1</th>
-                  <th>file_no_2</th>
-                  <th>last_attended_date</th>
-                  <th>withdraw_date</th>
-                  <th>narr_remark</th>
-                  <th>sch_session</th>
-                  <th>sys_remark</th>
-                  <th>fee_remark</th>
-                  <th>tc_no_auto_id</th>
                   <th>Edit</th>
                   <th>Delete</th>
                 </tr>
@@ -209,45 +177,14 @@ const Tc_Issue_Master_Detail_Search_Screen = () => {
                   <tr key={index}>
                     <th scope='row'>{index + 1}</th>
                     <th>{item.tc_no_manual}</th>
-                    <th>{item.entry_date_time}</th>
                     <th>{item.issue_date}</th>
-                    <th>{item.photo_image}</th>
-                    <th>{item.adm_sch_id}</th>
                     <th>{item.admit_no}</th>
                     <th>{item.sname}</th>
                     <th>{item.sex_mf}</th>
                     <th>{item.d_o_b}</th>
-                    <th>{item.adm_date}</th>
-                    <th>{item.f_name}</th>
-                    <th>{item.m_name}</th>
                     <th>{item.tc_for_current}</th>
                     <th>{item.tc_for_end}</th>
-                    <th>{item.curr_class}</th>
-                    <th>{item.curr_class_in_roman}</th>
-                    <th>{item.curr_class_in_word}</th>
-                    <th>{item.promted_class}</th>
-                    <th>{item.promoted_class_in_roman}</th>
-                    <th>{item.promoted_class_in_word}</th>
-                    <th>{item.date_numric}</th>
-                    <th>{item.month_no}</th>
-                    <th>{item.year_no}</th>
-                    <th>{item.from_year}</th>
-                    <th>{item.to_year}</th>
-                    <th>{item.possible_attend_days}</th>
-                    <th>{item.attendance_days}</th>
-                    <th>{item.leave_taken_days}</th>
-                    <th>{item.result_detail}</th>
-                    <th>{item.promot_yn}</th>
-                    <th>{item.certificate_type}</th>
-                    <th>{item.file_no_1}</th>
-                    <th>{item.file_no_2}</th>
-                    <th>{item.last_attended_date}</th>
-                    <th>{item.withdraw_date}</th>
-                    <th>{item.narr_remark}</th>
-                    <th>{item.sch_session}</th>
-                    <th>{item.sys_remark}</th>
-                    <th>{item.fee_remark}</th>
-                    <th>{item.tc_no_auto_id}</th>
+
                     <td>
                       <Button
                         color='success'

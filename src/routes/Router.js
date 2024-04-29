@@ -102,7 +102,20 @@ const ResultDetailMaster_Add = lazy(() =>
 const AdmisionReport = lazy(() =>
   import('../views/Report/AdmisionReports.jsx')
 );
-
+const System_Record_Details = lazy(() =>
+  import('../views/SystemRecord/SystemRecords.jsx')
+);
+const System_Record_Add = lazy(() =>
+  import('../views/SystemRecord/AddSystemRecord.jsx')
+);
+const Multipurpose_Details = lazy(() =>
+  import('../views/MultiPurposeMaster/Multi_Purpose_Type_Master_Search.jsx')
+);
+const Multipurpose_Add = lazy(() =>
+  import(
+    '../views/MultiPurposeMaster/Multi_Purpose_Type_Master_Add_Edit_Screen.jsx'
+  )
+);
 /*****Routes******/
 
 const ThemeRoutes = [
@@ -218,6 +231,26 @@ const ThemeRoutes = [
         path: '/AdmisionReports',
         exact: true,
         element: <AdmisionReport />,
+      },
+      {
+        path: '/AddSystemRecord',
+        exact: true,
+        element: <System_Record_Add />,
+      },
+      {
+        path: '/SystemRecords',
+        exact: true,
+        element: <System_Record_Details />,
+      },
+      {
+        path: '/Multi_Purpose_Type_Master_Add_Edit_Screen',
+        exact: true,
+        element: <Multipurpose_Add />,
+      },
+      {
+        path: '/Multi_Purpose_Type_Master_Search',
+        exact: true,
+        element: <Multipurpose_Details />,
       },
       //{ path: '/editFeeHead', exact: true, element: <EditFeeHead /> },
       // { path: "/category", exact: true, element: <Category /> },

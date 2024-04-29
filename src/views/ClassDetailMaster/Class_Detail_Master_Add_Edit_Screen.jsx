@@ -58,8 +58,10 @@ const Class_Detail_Master_Add_Edit_Screen = () => {
       tm_2: '',
       tm_3: '',
       class_detail_id: null,
+      admit_no_id: null,
     },
   ]);
+  const [partyTable, setPartyTable] = useState([]);
   useEffect(() => {
     // Check if location state exists and set the class_detail_masterData accordingly
     if (location.state) {
@@ -73,6 +75,7 @@ const Class_Detail_Master_Add_Edit_Screen = () => {
   useEffect(() => {
     // Check if location state exists and set the class_detail_masterData accordingly
     getClass_MasterData('');
+    GetAdmission('');
   }, []);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -260,7 +263,35 @@ const Class_Detail_Master_Add_Edit_Screen = () => {
       },
     ]);
   };
+  const GetAdmission = async (page = 1, limit = 10, search = '') => {
+    try {
+      let config = {
+        headers: {
+          'Content-Type': 'application/json', // Important for file upload//s
+          accept: 'application/json',
+        },
+      };
+      const response = await apiService.get(
+        `api/Admission/GetSchAdmissionResult?search=${search}`,
+        config
+      );
+      debugger;
+      if (response.response && response.response.data.errors) {
+        alert(response.response?.data?.errors);
+      }
 
+      if (response.status === true) {
+        setPartyTable(response.data);
+
+        // setTotalPage(response.totalPages);
+      } else {
+        alert(response.message);
+      }
+    } catch (error) {
+      console.log(error);
+      alert('SomeThing went wrong!!');
+    }
+  };
   const handleInputChange = (index, event) => {
     debugger;
     const { name, value } = event.target;
@@ -611,6 +642,25 @@ const Class_Detail_Master_Add_Edit_Screen = () => {
                             </div>
                           </div>
                           <div className='row'>
+                            <div className='col-3'>
+                              {' '}
+                              <FormGroup>
+                                <Label for='admit_no_id'> Admit No</Label>
+                                <select
+                                  className='form-select'
+                                  value={class_detail_masterData.admit_no_id}
+                                  name='admit_no_id'
+                                  onChange={onChangeHandle}
+                                >
+                                  <option value='0'>Select Admit No</option>
+                                  {partyTable.map((option) => (
+                                    <option key={option.id} value={option.id}>
+                                      {option.admit_no}
+                                    </option>
+                                  ))}
+                                </select>
+                              </FormGroup>
+                            </div>
                             <div className='col-3'>
                               {' '}
                               <FormGroup>
